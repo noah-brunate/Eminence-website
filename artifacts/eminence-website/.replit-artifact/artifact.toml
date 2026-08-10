@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "EMINENCE Website"
+description = "A professional tech company marketing website for EMINENCE — showcasing Software Solutions, Cloud Hosting, Consultancy services, a product portfolio, blog, careers, testimonials, and contact. Features animations, modern UI, and lead generation forms."
+version = "1.0.0"
+id = "artifacts/eminence-website"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23446
+
+[services.development]
+run = "pnpm --filter @workspace/eminence-website run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/eminence-website", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/eminence-website/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23446"
+BASE_PATH = "/"

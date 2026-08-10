@@ -1,0 +1,5 @@
+node_modules
+artifacts/api-server/node_modules
+artifacts/api-server/.env
+artifacts/eminence-website/node_modules
+artifacts/eminence-website/.env

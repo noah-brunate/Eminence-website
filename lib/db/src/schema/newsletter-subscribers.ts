@@ -1,0 +1,16 @@
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod/v4";
+
+export const newsletterSubscribersTable = pgTable("newsletter_subscribers", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  email: text("email").notNull().unique(),
+  subscribedAt: timestamp("subscribed_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const insertNewsletterSchema = createInsertSchema(newsletterSubscribersTable).omit({
+  id: true,
+  subscribedAt: true,
+});
+export type InsertNewsletter = z.infer<typeof insertNewsletterSchema>;
+export type NewsletterSubscriber = typeof newsletterSubscribersTable.$inferSelect;

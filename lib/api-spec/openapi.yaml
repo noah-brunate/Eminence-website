@@ -1,0 +1,386 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: EMINENCE company website API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: contact
+    description: Contact form
+  - name: newsletter
+    description: Newsletter subscriptions
+  - name: careers
+    description: Careers and job applications
+  - name: content
+    description: Site content (products, testimonials, blog)
+  - name: stats
+    description: Company stats
+  - name: chat
+    description: Live chat support
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /contact:
+    post:
+      operationId: submitContact
+      tags: [contact]
+      summary: Submit contact form
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactInput"
+      responses:
+        "200":
+          description: Submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /newsletter:
+    post:
+      operationId: subscribeNewsletter
+      tags: [newsletter]
+      summary: Subscribe to newsletter
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsletterInput"
+      responses:
+        "200":
+          description: Subscribed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "409":
+          description: Already subscribed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /careers/roles:
+    get:
+      operationId: listRoles
+      tags: [careers]
+      summary: List open job roles
+      responses:
+        "200":
+          description: List of open roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Role"
+
+  /careers/apply:
+    post:
+      operationId: submitApplication
+      tags: [careers]
+      summary: Submit a job application
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JobApplicationInput"
+      responses:
+        "200":
+          description: Application received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /products:
+    get:
+      operationId: listProducts
+      tags: [content]
+      summary: List software products
+      responses:
+        "200":
+          description: Product portfolio
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /testimonials:
+    get:
+      operationId: listTestimonials
+      tags: [content]
+      summary: List client testimonials
+      responses:
+        "200":
+          description: Testimonials
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Testimonial"
+
+  /blog/posts:
+    get:
+      operationId: listBlogPosts
+      tags: [content]
+      summary: List blog posts
+      responses:
+        "200":
+          description: Blog posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BlogPost"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [stats]
+      summary: Get company stats for homepage
+      responses:
+        "200":
+          description: Company stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompanyStats"
+
+  /chat:
+    post:
+      operationId: submitChatMessage
+      tags: [chat]
+      summary: Submit a chat support message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatMessageInput"
+      responses:
+        "200":
+          description: Message received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    SuccessResponse:
+      type: object
+      required: [success, message]
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
+    ContactInput:
+      type: object
+      required: [name, email, message]
+      properties:
+        name:
+          type: string
+          minLength: 2
+        email:
+          type: string
+        company:
+          type: ["string", "null"]
+        service:
+          type: ["string", "null"]
+          description: Which service they are enquiring about
+        message:
+          type: string
+          minLength: 10
+
+    NewsletterInput:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+
+    JobApplicationInput:
+      type: object
+      required: [fullName, email, roleAppliedFor]
+      properties:
+        fullName:
+          type: string
+          minLength: 2
+        email:
+          type: string
+        roleAppliedFor:
+          type: string
+        coverNote:
+          type: ["string", "null"]
+        linkedinUrl:
+          type: ["string", "null"]
+
+    ChatMessageInput:
+      type: object
+      required: [name, email, message]
+      properties:
+        name:
+          type: string
+          minLength: 2
+        email:
+          type: string
+        message:
+          type: string
+          minLength: 3
+
+    Role:
+      type: object
+      required: [id, title, department, location, type, description]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        department:
+          type: string
+        location:
+          type: string
+        type:
+          type: string
+          description: "Full-time, Part-time, Contract, Remote"
+        description:
+          type: string
+        postedAt:
+          type: string
+
+    Product:
+      type: object
+      required: [id, slug, name, tagline, description, category, status]
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        tagline:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+        status:
+          type: string
+          description: "Live, Beta, Coming Soon"
+        features:
+          type: array
+          items:
+            type: string
+        url:
+          type: ["string", "null"]
+
+    Testimonial:
+      type: object
+      required: [id, clientName, company, role, quote, rating]
+      properties:
+        id:
+          type: string
+        clientName:
+          type: string
+        company:
+          type: string
+        role:
+          type: string
+        quote:
+          type: string
+        rating:
+          type: number
+        service:
+          type: string
+
+    BlogPost:
+      type: object
+      required: [id, slug, title, excerpt, author, publishedAt, category]
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        title:
+          type: string
+        excerpt:
+          type: string
+        author:
+          type: string
+        publishedAt:
+          type: string
+        category:
+          type: string
+        readTime:
+          type: string
+
+    CompanyStats:
+      type: object
+      required: [clientsServed, projectsDelivered, teamSize, yearsActive, countriesReached]
+      properties:
+        clientsServed:
+          type: number
+        projectsDelivered:
+          type: number
+        teamSize:
+          type: number
+        yearsActive:
+          type: number
+        countriesReached:
+          type: number
+        satisfactionRate:
+          type: number
