@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # EXCEPTION: Do not touch or reroute anything hitting the active backend /api path
+  RewriteCond %{REQUEST_URI} ^/api/ [NC]
+  RewriteRule .* - [L]
+
+  # Standard React SPA Fallback: Route all other requests to index.html
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILESYSTEM} !-f
+  RewriteCond %{REQUEST_FILESYSTEM} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
