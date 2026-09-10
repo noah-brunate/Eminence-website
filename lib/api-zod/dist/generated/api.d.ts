@@ -7,6 +7,386 @@
  */
 import * as zod from 'zod';
 /**
+ * Published copy for the fixed website pages.
+ * @summary getSitePages
+ */
+export declare const GetSitePagesResponse: zod.ZodRecord<zod.ZodString, zod.ZodRecord<zod.ZodString, zod.ZodString>>;
+/**
+ * @summary getContentSchema
+ */
+export declare const GetContentSchemaResponse: zod.ZodObject<{
+    collections: zod.ZodRecord<zod.ZodString, zod.ZodArray<zod.ZodObject<{
+        key: zod.ZodString;
+        label: zod.ZodString;
+        type: zod.ZodEnum<["text", "long", "number", "list", "choice", "link", "image"]>;
+        required: zod.ZodOptional<zod.ZodBoolean>;
+        choices: zod.ZodOptional<zod.ZodArray<zod.ZodString, "many">>;
+    }, "strip", zod.ZodTypeAny, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }>, "many">>;
+    pages: zod.ZodRecord<zod.ZodString, zod.ZodArray<zod.ZodObject<{
+        key: zod.ZodString;
+        label: zod.ZodString;
+        type: zod.ZodEnum<["text", "long", "number", "list", "choice", "link", "image"]>;
+        required: zod.ZodOptional<zod.ZodBoolean>;
+        choices: zod.ZodOptional<zod.ZodArray<zod.ZodString, "many">>;
+    }, "strip", zod.ZodTypeAny, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }>, "many">>;
+}, "strip", zod.ZodTypeAny, {
+    collections: Record<string, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }[]>;
+    pages: Record<string, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }[]>;
+}, {
+    collections: Record<string, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }[]>;
+    pages: Record<string, {
+        type: "number" | "text" | "long" | "list" | "choice" | "link" | "image";
+        key: string;
+        label: string;
+        required?: boolean | undefined;
+        choices?: string[] | undefined;
+    }[]>;
+}>;
+/**
+ * @summary listContentRecords
+ */
+export declare const ListContentRecordsParams: zod.ZodObject<{
+    kind: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    kind: string;
+}, {
+    kind: string;
+}>;
+export declare const ListContentRecordsResponseItem: zod.ZodObject<{
+    kind: zod.ZodString;
+    id: zod.ZodString;
+    data: zod.ZodRecord<zod.ZodString, zod.ZodUnknown>;
+    publishedData: zod.ZodNullable<zod.ZodRecord<zod.ZodString, zod.ZodUnknown>>;
+    published: zod.ZodBoolean;
+    position: zod.ZodNumber;
+    version: zod.ZodNumber;
+    updatedAt: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    kind: string;
+    id: string;
+    data: Record<string, unknown>;
+    publishedData: Record<string, unknown> | null;
+    published: boolean;
+    position: number;
+    version: number;
+    updatedAt: string;
+}, {
+    kind: string;
+    id: string;
+    data: Record<string, unknown>;
+    publishedData: Record<string, unknown> | null;
+    published: boolean;
+    position: number;
+    version: number;
+    updatedAt: string;
+}>;
+export declare const ListContentRecordsResponse: zod.ZodArray<zod.ZodObject<{
+    kind: zod.ZodString;
+    id: zod.ZodString;
+    data: zod.ZodRecord<zod.ZodString, zod.ZodUnknown>;
+    publishedData: zod.ZodNullable<zod.ZodRecord<zod.ZodString, zod.ZodUnknown>>;
+    published: zod.ZodBoolean;
+    position: zod.ZodNumber;
+    version: zod.ZodNumber;
+    updatedAt: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    kind: string;
+    id: string;
+    data: Record<string, unknown>;
+    publishedData: Record<string, unknown> | null;
+    published: boolean;
+    position: number;
+    version: number;
+    updatedAt: string;
+}, {
+    kind: string;
+    id: string;
+    data: Record<string, unknown>;
+    publishedData: Record<string, unknown> | null;
+    published: boolean;
+    position: number;
+    version: number;
+    updatedAt: string;
+}>, "many">;
+/**
+ * Save draft, publish or unpublish. Version zero creates a collection item. Existing records require their current version.
+ * @summary saveContentRecord
+ */
+export declare const SaveContentRecordParams: zod.ZodObject<{
+    kind: zod.ZodString;
+    id: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    kind: string;
+    id: string;
+}, {
+    kind: string;
+    id: string;
+}>;
+export declare const SaveContentRecordBody: zod.ZodObject<{
+    data: zod.ZodRecord<zod.ZodString, zod.ZodUnknown>;
+    version: zod.ZodNumber;
+    position: zod.ZodNumber;
+    action: zod.ZodEnum<["save", "publish", "unpublish"]>;
+}, "strip", zod.ZodTypeAny, {
+    data: Record<string, unknown>;
+    position: number;
+    version: number;
+    action: "save" | "publish" | "unpublish";
+}, {
+    data: Record<string, unknown>;
+    position: number;
+    version: number;
+    action: "save" | "publish" | "unpublish";
+}>;
+export declare const SaveContentRecordResponse: zod.ZodObject<{
+    kind: zod.ZodString;
+    id: zod.ZodString;
+    data: zod.ZodRecord<zod.ZodString, zod.ZodUnknown>;
+    publishedData: zod.ZodNullable<zod.ZodRecord<zod.ZodString, zod.ZodUnknown>>;
+    published: zod.ZodBoolean;
+    position: zod.ZodNumber;
+    version: zod.ZodNumber;
+    updatedAt: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    kind: string;
+    id: string;
+    data: Record<string, unknown>;
+    publishedData: Record<string, unknown> | null;
+    published: boolean;
+    position: number;
+    version: number;
+    updatedAt: string;
+}, {
+    kind: string;
+    id: string;
+    data: Record<string, unknown>;
+    publishedData: Record<string, unknown> | null;
+    published: boolean;
+    position: number;
+    version: number;
+    updatedAt: string;
+}>;
+/**
+ * @summary deleteContentRecord
+ */
+export declare const DeleteContentRecordParams: zod.ZodObject<{
+    kind: zod.ZodString;
+    id: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    kind: string;
+    id: string;
+}, {
+    kind: string;
+    id: string;
+}>;
+export declare const DeleteContentRecordBody: zod.ZodObject<{
+    version: zod.ZodNumber;
+}, "strip", zod.ZodTypeAny, {
+    version: number;
+}, {
+    version: number;
+}>;
+export declare const DeleteContentRecordResponse: zod.ZodObject<{
+    success: zod.ZodBoolean;
+}, "strip", zod.ZodTypeAny, {
+    success: boolean;
+}, {
+    success: boolean;
+}>;
+/**
+ * @summary listBookingReplies
+ */
+export declare const ListBookingRepliesParams: zod.ZodObject<{
+    id: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    id: string;
+}, {
+    id: string;
+}>;
+export declare const ListBookingRepliesResponseItem: zod.ZodObject<{
+    id: zod.ZodString;
+    bookingId: zod.ZodString;
+    recipient: zod.ZodString;
+    subject: zod.ZodString;
+    message: zod.ZodString;
+    kind: zod.ZodString;
+    status: zod.ZodString;
+    appointmentAt: zod.ZodNullable<zod.ZodString>;
+    error: zod.ZodNullable<zod.ZodString>;
+    createdAt: zod.ZodString;
+    sentAt: zod.ZodNullable<zod.ZodString>;
+}, "strip", zod.ZodTypeAny, {
+    message: string;
+    status: string;
+    kind: string;
+    id: string;
+    bookingId: string;
+    recipient: string;
+    subject: string;
+    appointmentAt: string | null;
+    error: string | null;
+    createdAt: string;
+    sentAt: string | null;
+}, {
+    message: string;
+    status: string;
+    kind: string;
+    id: string;
+    bookingId: string;
+    recipient: string;
+    subject: string;
+    appointmentAt: string | null;
+    error: string | null;
+    createdAt: string;
+    sentAt: string | null;
+}>;
+export declare const ListBookingRepliesResponse: zod.ZodArray<zod.ZodObject<{
+    id: zod.ZodString;
+    bookingId: zod.ZodString;
+    recipient: zod.ZodString;
+    subject: zod.ZodString;
+    message: zod.ZodString;
+    kind: zod.ZodString;
+    status: zod.ZodString;
+    appointmentAt: zod.ZodNullable<zod.ZodString>;
+    error: zod.ZodNullable<zod.ZodString>;
+    createdAt: zod.ZodString;
+    sentAt: zod.ZodNullable<zod.ZodString>;
+}, "strip", zod.ZodTypeAny, {
+    message: string;
+    status: string;
+    kind: string;
+    id: string;
+    bookingId: string;
+    recipient: string;
+    subject: string;
+    appointmentAt: string | null;
+    error: string | null;
+    createdAt: string;
+    sentAt: string | null;
+}, {
+    message: string;
+    status: string;
+    kind: string;
+    id: string;
+    bookingId: string;
+    recipient: string;
+    subject: string;
+    appointmentAt: string | null;
+    error: string | null;
+    createdAt: string;
+    sentAt: string | null;
+}>, "many">;
+/**
+ * Sends a customer email. Reuse the request UUID for retries; repeated IDs never send twice. sent means mail server accepted, not confirmed inbox delivery.
+ * @summary sendBookingReply
+ */
+export declare const SendBookingReplyParams: zod.ZodObject<{
+    id: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    id: string;
+}, {
+    id: string;
+}>;
+export declare const SendBookingReplyBody: zod.ZodObject<{
+    id: zod.ZodString;
+    subject: zod.ZodString;
+    message: zod.ZodString;
+    kind: zod.ZodEnum<["message", "confirm", "propose"]>;
+    appointmentAt: zod.ZodOptional<zod.ZodString>;
+}, "strip", zod.ZodTypeAny, {
+    message: string;
+    kind: "message" | "confirm" | "propose";
+    id: string;
+    subject: string;
+    appointmentAt?: string | undefined;
+}, {
+    message: string;
+    kind: "message" | "confirm" | "propose";
+    id: string;
+    subject: string;
+    appointmentAt?: string | undefined;
+}>;
+export declare const SendBookingReplyResponse: zod.ZodObject<{
+    id: zod.ZodString;
+    bookingId: zod.ZodString;
+    recipient: zod.ZodString;
+    subject: zod.ZodString;
+    message: zod.ZodString;
+    kind: zod.ZodString;
+    status: zod.ZodString;
+    appointmentAt: zod.ZodNullable<zod.ZodString>;
+    error: zod.ZodNullable<zod.ZodString>;
+    createdAt: zod.ZodString;
+    sentAt: zod.ZodNullable<zod.ZodString>;
+}, "strip", zod.ZodTypeAny, {
+    message: string;
+    status: string;
+    kind: string;
+    id: string;
+    bookingId: string;
+    recipient: string;
+    subject: string;
+    appointmentAt: string | null;
+    error: string | null;
+    createdAt: string;
+    sentAt: string | null;
+}, {
+    message: string;
+    status: string;
+    kind: string;
+    id: string;
+    bookingId: string;
+    recipient: string;
+    subject: string;
+    appointmentAt: string | null;
+    error: string | null;
+    createdAt: string;
+    sentAt: string | null;
+}>;
+/**
  * @summary Health check
  */
 export declare const HealthCheckResponse: zod.ZodObject<{
@@ -27,18 +407,21 @@ export declare const SubmitContactBody: zod.ZodObject<{
     company: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
     service: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
     message: zod.ZodString;
+    website: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
 }, "strip", zod.ZodTypeAny, {
     message: string;
-    name: string;
     email: string;
+    name: string;
     company?: string | null | undefined;
     service?: string | null | undefined;
+    website?: string | null | undefined;
 }, {
     message: string;
-    name: string;
     email: string;
+    name: string;
     company?: string | null | undefined;
     service?: string | null | undefined;
+    website?: string | null | undefined;
 }>;
 export declare const SubmitContactResponse: zod.ZodObject<{
     success: zod.ZodBoolean;
@@ -49,6 +432,255 @@ export declare const SubmitContactResponse: zod.ZodObject<{
 }, {
     message: string;
     success: boolean;
+}>;
+/**
+ * @summary Submit a consultation booking request
+ */
+export declare const submitBookingBodyNameMin = 2;
+export declare const submitBookingBodyNameMax = 120;
+export declare const submitBookingBodyCompanyMin = 2;
+export declare const submitBookingBodyCompanyMax = 160;
+export declare const submitBookingBodyPhoneMax = 40;
+export declare const submitBookingBodyTopicMin = 2;
+export declare const submitBookingBodyTopicMax = 160;
+export declare const submitBookingBodyMessageMax = 3000;
+export declare const submitBookingBodyTimezoneMax = 100;
+export declare const SubmitBookingBody: zod.ZodObject<{
+    name: zod.ZodString;
+    email: zod.ZodString;
+    company: zod.ZodString;
+    phone: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    topic: zod.ZodString;
+    message: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    preferredAt: zod.ZodDate;
+    timezone: zod.ZodString;
+    website: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+}, "strip", zod.ZodTypeAny, {
+    email: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: Date;
+    timezone: string;
+    message?: string | null | undefined;
+    website?: string | null | undefined;
+    phone?: string | null | undefined;
+}, {
+    email: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: Date;
+    timezone: string;
+    message?: string | null | undefined;
+    website?: string | null | undefined;
+    phone?: string | null | undefined;
+}>;
+export declare const SubmitBookingResponse: zod.ZodObject<{
+    success: zod.ZodBoolean;
+    message: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    message: string;
+    success: boolean;
+}, {
+    message: string;
+    success: boolean;
+}>;
+/**
+ * Same-origin JSON requests only. Send X-Admin-Request with value 1.
+ * @summary Sign in to the administrator console
+ */
+export declare const adminLoginBodyEmailMax = 254;
+export declare const adminLoginBodyPasswordMax = 1024;
+export declare const AdminLoginBody: zod.ZodObject<{
+    email: zod.ZodString;
+    password: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    email: string;
+    password: string;
+}, {
+    email: string;
+    password: string;
+}>;
+export declare const AdminLoginResponse: zod.ZodObject<{
+    email: zod.ZodString;
+    csrfToken: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    email: string;
+    csrfToken: string;
+}, {
+    email: string;
+    csrfToken: string;
+}>;
+/**
+ * @summary Restore an administrator session
+ */
+export declare const GetAdminSessionResponse: zod.ZodObject<{
+    email: zod.ZodString;
+    csrfToken: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    email: string;
+    csrfToken: string;
+}, {
+    email: string;
+    csrfToken: string;
+}>;
+/**
+ * @summary Revoke the current administrator session
+ */
+export declare const AdminLogoutResponse: zod.ZodUnknown;
+/**
+ * @summary List consultation booking requests
+ */
+export declare const ListBookingsResponseItem: zod.ZodObject<{
+    id: zod.ZodString;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    company: zod.ZodString;
+    phone: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    topic: zod.ZodString;
+    message: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    preferredAt: zod.ZodString;
+    timezone: zod.ZodString;
+    status: zod.ZodEnum<["new", "contacted", "scheduled", "completed", "cancelled", "spam"]>;
+    internalNotes: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    createdAt: zod.ZodString;
+    updatedAt: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    status: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam";
+    email: string;
+    id: string;
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: string;
+    timezone: string;
+    message?: string | null | undefined;
+    phone?: string | null | undefined;
+    internalNotes?: string | null | undefined;
+}, {
+    status: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam";
+    email: string;
+    id: string;
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: string;
+    timezone: string;
+    message?: string | null | undefined;
+    phone?: string | null | undefined;
+    internalNotes?: string | null | undefined;
+}>;
+export declare const ListBookingsResponse: zod.ZodArray<zod.ZodObject<{
+    id: zod.ZodString;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    company: zod.ZodString;
+    phone: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    topic: zod.ZodString;
+    message: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    preferredAt: zod.ZodString;
+    timezone: zod.ZodString;
+    status: zod.ZodEnum<["new", "contacted", "scheduled", "completed", "cancelled", "spam"]>;
+    internalNotes: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    createdAt: zod.ZodString;
+    updatedAt: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    status: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam";
+    email: string;
+    id: string;
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: string;
+    timezone: string;
+    message?: string | null | undefined;
+    phone?: string | null | undefined;
+    internalNotes?: string | null | undefined;
+}, {
+    status: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam";
+    email: string;
+    id: string;
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: string;
+    timezone: string;
+    message?: string | null | undefined;
+    phone?: string | null | undefined;
+    internalNotes?: string | null | undefined;
+}>, "many">;
+/**
+ * @summary Update booking status and internal notes
+ */
+export declare const UpdateBookingParams: zod.ZodObject<{
+    id: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    id: string;
+}, {
+    id: string;
+}>;
+export declare const updateBookingBodyInternalNotesMax = 5000;
+export declare const UpdateBookingBody: zod.ZodObject<{
+    status: zod.ZodOptional<zod.ZodEnum<["new", "contacted", "scheduled", "completed", "cancelled", "spam"]>>;
+    internalNotes: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+}, "strip", zod.ZodTypeAny, {
+    status?: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam" | undefined;
+    internalNotes?: string | null | undefined;
+}, {
+    status?: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam" | undefined;
+    internalNotes?: string | null | undefined;
+}>;
+export declare const UpdateBookingResponse: zod.ZodObject<{
+    id: zod.ZodString;
+    name: zod.ZodString;
+    email: zod.ZodString;
+    company: zod.ZodString;
+    phone: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    topic: zod.ZodString;
+    message: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    preferredAt: zod.ZodString;
+    timezone: zod.ZodString;
+    status: zod.ZodEnum<["new", "contacted", "scheduled", "completed", "cancelled", "spam"]>;
+    internalNotes: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
+    createdAt: zod.ZodString;
+    updatedAt: zod.ZodString;
+}, "strip", zod.ZodTypeAny, {
+    status: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam";
+    email: string;
+    id: string;
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: string;
+    timezone: string;
+    message?: string | null | undefined;
+    phone?: string | null | undefined;
+    internalNotes?: string | null | undefined;
+}, {
+    status: "new" | "contacted" | "scheduled" | "completed" | "cancelled" | "spam";
+    email: string;
+    id: string;
+    updatedAt: string;
+    createdAt: string;
+    name: string;
+    company: string;
+    topic: string;
+    preferredAt: string;
+    timezone: string;
+    message?: string | null | undefined;
+    phone?: string | null | undefined;
+    internalNotes?: string | null | undefined;
 }>;
 /**
  * @summary Subscribe to newsletter
@@ -171,24 +803,24 @@ export declare const ListProductsResponseItem: zod.ZodObject<{
     url: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
 }, "strip", zod.ZodTypeAny, {
     status: string;
-    name: string;
     id: string;
+    name: string;
     description: string;
     slug: string;
     tagline: string;
     category: string;
-    features?: string[] | undefined;
     url?: string | null | undefined;
+    features?: string[] | undefined;
 }, {
     status: string;
-    name: string;
     id: string;
+    name: string;
     description: string;
     slug: string;
     tagline: string;
     category: string;
-    features?: string[] | undefined;
     url?: string | null | undefined;
+    features?: string[] | undefined;
 }>;
 export declare const ListProductsResponse: zod.ZodArray<zod.ZodObject<{
     id: zod.ZodString;
@@ -202,24 +834,24 @@ export declare const ListProductsResponse: zod.ZodArray<zod.ZodObject<{
     url: zod.ZodOptional<zod.ZodNullable<zod.ZodString>>;
 }, "strip", zod.ZodTypeAny, {
     status: string;
-    name: string;
     id: string;
+    name: string;
     description: string;
     slug: string;
     tagline: string;
     category: string;
-    features?: string[] | undefined;
     url?: string | null | undefined;
+    features?: string[] | undefined;
 }, {
     status: string;
-    name: string;
     id: string;
+    name: string;
     description: string;
     slug: string;
     tagline: string;
     category: string;
-    features?: string[] | undefined;
     url?: string | null | undefined;
+    features?: string[] | undefined;
 }>, "many">;
 /**
  * @summary List client testimonials
@@ -233,16 +865,16 @@ export declare const ListTestimonialsResponseItem: zod.ZodObject<{
     rating: zod.ZodNumber;
     service: zod.ZodOptional<zod.ZodString>;
 }, "strip", zod.ZodTypeAny, {
-    company: string;
     id: string;
+    company: string;
     clientName: string;
     role: string;
     quote: string;
     rating: number;
     service?: string | undefined;
 }, {
-    company: string;
     id: string;
+    company: string;
     clientName: string;
     role: string;
     quote: string;
@@ -258,16 +890,16 @@ export declare const ListTestimonialsResponse: zod.ZodArray<zod.ZodObject<{
     rating: zod.ZodNumber;
     service: zod.ZodOptional<zod.ZodString>;
 }, "strip", zod.ZodTypeAny, {
-    company: string;
     id: string;
+    company: string;
     clientName: string;
     role: string;
     quote: string;
     rating: number;
     service?: string | undefined;
 }, {
-    company: string;
     id: string;
+    company: string;
     clientName: string;
     role: string;
     quote: string;
@@ -278,6 +910,7 @@ export declare const ListTestimonialsResponse: zod.ZodArray<zod.ZodObject<{
  * @summary List blog posts
  */
 export declare const ListBlogPostsResponseItem: zod.ZodObject<{
+    body: zod.ZodOptional<zod.ZodString>;
     id: zod.ZodString;
     slug: zod.ZodString;
     title: zod.ZodString;
@@ -294,6 +927,7 @@ export declare const ListBlogPostsResponseItem: zod.ZodObject<{
     excerpt: string;
     author: string;
     publishedAt: string;
+    body?: string | undefined;
     readTime?: string | undefined;
 }, {
     id: string;
@@ -303,9 +937,11 @@ export declare const ListBlogPostsResponseItem: zod.ZodObject<{
     excerpt: string;
     author: string;
     publishedAt: string;
+    body?: string | undefined;
     readTime?: string | undefined;
 }>;
 export declare const ListBlogPostsResponse: zod.ZodArray<zod.ZodObject<{
+    body: zod.ZodOptional<zod.ZodString>;
     id: zod.ZodString;
     slug: zod.ZodString;
     title: zod.ZodString;
@@ -322,6 +958,7 @@ export declare const ListBlogPostsResponse: zod.ZodArray<zod.ZodObject<{
     excerpt: string;
     author: string;
     publishedAt: string;
+    body?: string | undefined;
     readTime?: string | undefined;
 }, {
     id: string;
@@ -331,6 +968,7 @@ export declare const ListBlogPostsResponse: zod.ZodArray<zod.ZodObject<{
     excerpt: string;
     author: string;
     publishedAt: string;
+    body?: string | undefined;
     readTime?: string | undefined;
 }>, "many">;
 /**
@@ -369,12 +1007,12 @@ export declare const SubmitChatMessageBody: zod.ZodObject<{
     message: zod.ZodString;
 }, "strip", zod.ZodTypeAny, {
     message: string;
-    name: string;
     email: string;
+    name: string;
 }, {
     message: string;
-    name: string;
     email: string;
+    name: string;
 }>;
 export declare const SubmitChatMessageResponse: zod.ZodObject<{
     success: zod.ZodBoolean;

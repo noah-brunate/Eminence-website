@@ -6,10 +6,10 @@ deployment:
     - export BACKENDPATH=/home/eminence/repositories/my-monorepo/artifact/backend
 
     # 2. Extract and copy the React Vite production build to the live web directory
-    - /bin/cp -R artifact/eminence-website/dist/public/* $DEPLOYPATH
+    - /bin/cp -R artifacts/eminence-website/dist/public/* $DEPLOYPATH
 
     # 3. Synchronize the backend source files into the active server folder
-    - /bin/cp -R artifact/api-server/* $BACKENDPATH
+    - /bin/cp -R artifacts/api-server/* $BACKENDPATH
 
     # 4. Force Phusion Passenger to instantly restart your Node.js API process
     - touch $BACKENDPATH/tmp/restart.txt

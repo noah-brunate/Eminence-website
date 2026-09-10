@@ -7,6 +7,8 @@
  */
 
 export interface BlogPost {
+  /** Article body with limited paragraph, heading, quote and list formatting. */
+  body?: string;
   id: string;
   slug: string;
   title: string;

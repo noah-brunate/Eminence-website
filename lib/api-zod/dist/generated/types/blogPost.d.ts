@@ -6,6 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 export interface BlogPost {
+    /** Article body with limited paragraph, heading, quote and list formatting. */
+    body?: string;
     id: string;
     slug: string;
     title: string;

@@ -1,3 +1,4 @@
+import { useSiteCopy } from "@/lib/site-content";
 import React from "react";
 import { motion } from "framer-motion";
 import { Reveal, StaggerChildren } from "@/components/animations";
@@ -26,11 +27,13 @@ const AnimatedCounter = ({
   value: number;
   label: string;
 }) => {
+  const copy = useSiteCopy("home");
+
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 hover-elevate">
       <div className="text-4xl md:text-5xl font-bold text-primary dark:text-white mb-2 font-mono tracking-tight">
         {value.toLocaleString()}
-        <span className="text-accent">+</span>
+        <span className="text-accent">{copy("001", "+")}</span>
       </div>
       <div className="text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider text-sm">
         {label}
@@ -40,6 +43,8 @@ const AnimatedCounter = ({
 };
 
 export default function Home() {
+  const copy = useSiteCopy("home");
+
   const { data: stats, isLoading: statsLoading } = useGetStats();
   const { data: products, isLoading: productsLoading } = useListProducts();
   const { data: testimonials, isLoading: testimonialsLoading } =
@@ -62,23 +67,26 @@ export default function Home() {
             <Reveal>
               <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-white backdrop-blur-md mb-8">
                 <span className="flex h-2 w-2 rounded-full bg-accent mr-2 animate-pulse"></span>
-                Pioneering Enterprise Solutions
+                {copy("002", "Pioneering Enterprise Solutions")}
               </div>
             </Reveal>
 
             <Reveal delay={0.1}>
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight leading-[1.1] mb-6">
-                Engineering the Future, <br />
+                {copy("003", "Engineering the Future, ")}
+                <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent via-blue-400 to-teal-400">
-                  One Solution at a Time.
+                  {copy("004", "One Solution at a Time.")}
                 </span>
               </h1>
             </Reveal>
 
             <Reveal delay={0.2}>
               <p className="text-xl md:text-2xl text-slate-300 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
-                Precision-engineered software, cloud infrastructure, and deep
-                technical consultancy for companies scaling to the next level.
+                {copy(
+                  "005",
+                  "Precision-engineered software, cloud infrastructure, and deep technical consultancy for companies scaling to the next level.",
+                )}
               </p>
             </Reveal>
 
@@ -89,7 +97,7 @@ export default function Home() {
                   size="lg"
                   className="h-14 px-8 rounded-full text-base bg-accent hover:bg-accent/90 text-white w-full sm:w-auto shadow-lg shadow-accent/25"
                 >
-                  <Link href="/contact">Get Started</Link>
+                  <Link href="/contact">{copy("006", "Get Started")}</Link>
                 </Button>
                 <Button
                   asChild
@@ -97,7 +105,7 @@ export default function Home() {
                   variant="outline"
                   className="h-14 px-8 rounded-full text-base border-white/20 text-white hover:bg-white/10 w-full sm:w-auto backdrop-blur-sm bg-white/5"
                 >
-                  <Link href="#services">Our Services</Link>
+                  <Link href="#services">{copy("007", "Our Services")}</Link>
                 </Button>
               </div>
             </Reveal>
@@ -124,19 +132,19 @@ export default function Home() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               <AnimatedCounter
                 value={stats?.clientsServed || 500}
-                label="Clients Served"
+                label={copy("008", "Clients Served")}
               />
               <AnimatedCounter
                 value={stats?.projectsDelivered || 1200}
-                label="Projects Delivered"
+                label={copy("009", "Projects Delivered")}
               />
               <AnimatedCounter
                 value={stats?.teamSize || 150}
-                label="Engineers"
+                label={copy("010", "Engineers")}
               />
               <AnimatedCounter
                 value={stats?.countriesReached || 30}
-                label="Countries"
+                label={copy("011", "Countries")}
               />
             </div>
           )}
@@ -149,11 +157,13 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto mb-16">
             <Reveal>
               <h2 className="text-3xl md:text-5xl font-bold mb-6 text-slate-900 dark:text-white">
-                Core Capabilities
+                {copy("012", "Core Capabilities")}
               </h2>
               <p className="text-lg text-slate-600 dark:text-slate-400">
-                End-to-end technical excellence spanning custom development,
-                robust infrastructure, and strategic advisory.
+                {copy(
+                  "013",
+                  "End-to-end technical excellence spanning custom development, robust infrastructure, and strategic advisory.",
+                )}
               </p>
             </Reveal>
           </div>
@@ -167,14 +177,16 @@ export default function Home() {
                 <Code className="w-7 h-7 text-primary dark:text-accent" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-accent transition-colors">
-                Software Solutions
+                {copy("014", "Software Solutions")}
               </h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3">
-                Bespoke enterprise applications, scalable architectures, and
-                modern web platforms built for performance.
+                {copy(
+                  "015",
+                  "Bespoke enterprise applications, scalable architectures, and modern web platforms built for performance.",
+                )}
               </p>
               <div className="text-accent font-medium flex items-center text-sm">
-                Learn more{" "}
+                {copy("016", "Learn more")}{" "}
                 <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -187,14 +199,16 @@ export default function Home() {
                 <Server className="w-7 h-7 text-teal-600 dark:text-teal-400" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-teal-500 transition-colors">
-                Cloud Hosting
+                {copy("017", "Cloud Hosting")}
               </h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3">
-                High-availability infrastructure, seamless migrations, and
-                managed DevOps for mission-critical workloads.
+                {copy(
+                  "018",
+                  "High-availability infrastructure, seamless migrations, and managed DevOps for mission-critical workloads.",
+                )}
               </p>
               <div className="text-teal-600 dark:text-teal-400 font-medium flex items-center text-sm">
-                Learn more{" "}
+                {copy("019", "Learn more")}{" "}
                 <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -207,14 +221,16 @@ export default function Home() {
                 <Building className="w-7 h-7 text-amber-600 dark:text-amber-400" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
-                Consultancy
+                {copy("020", "Consultancy")}
               </h3>
               <p className="text-slate-600 dark:text-slate-400 mb-6 line-clamp-3">
-                Strategic tech leadership, architecture audits, and digital
-                transformation roadmaps for scale-ups.
+                {copy(
+                  "021",
+                  "Strategic tech leadership, architecture audits, and digital transformation roadmaps for scale-ups.",
+                )}
               </p>
               <div className="text-amber-600 dark:text-amber-400 font-medium flex items-center text-sm">
-                Learn more{" "}
+                {copy("022", "Learn more")}{" "}
                 <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -228,14 +244,16 @@ export default function Home() {
                 <Cpu className="w-7 h-7 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-white">
-                Proprietary Products
+                {copy("023", "Proprietary Products")}
               </h3>
               <p className="text-primary-foreground/80 mb-6 line-clamp-3">
-                Access our suite of internal tools and SaaS products designed to
-                accelerate development and deployment.
+                {copy(
+                  "024",
+                  "Access our suite of internal tools and SaaS products designed to accelerate development and deployment.",
+                )}
               </p>
               <div className="text-white font-medium flex items-center text-sm">
-                View portfolio{" "}
+                {copy("025", "View portfolio")}{" "}
                 <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -250,15 +268,17 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div className="max-w-2xl">
                 <h2 className="text-3xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
-                  Featured Products
+                  {copy("026", "Featured Products")}
                 </h2>
                 <p className="text-lg text-slate-600 dark:text-slate-400">
-                  Tools engineered by our team to solve complex industry
-                  challenges.
+                  {copy(
+                    "027",
+                    "Tools engineered by our team to solve complex industry challenges.",
+                  )}
                 </p>
               </div>
               <Button asChild variant="outline" className="rounded-full">
-                <Link href="/products">View All Products</Link>
+                <Link href="/products">{copy("028", "View All Products")}</Link>
               </Button>
             </div>
           </Reveal>
@@ -313,7 +333,7 @@ export default function Home() {
                         </p>
 
                         <div className="flex items-center text-accent font-medium group-hover:underline">
-                          Explore product{" "}
+                          {copy("029", "Explore product")}{" "}
                           <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
@@ -322,7 +342,7 @@ export default function Home() {
                 ))
               ) : (
                 <div className="text-slate-500 dark:text-slate-400 text-center w-full py-16">
-                  No products available at the moment.
+                  {copy("030", "No products available at the moment.")}
                 </div>
               )}
             </div>
@@ -336,11 +356,13 @@ export default function Home() {
           <Reveal>
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
-                Trusted by Leaders
+                {copy("031", "Trusted by Leaders")}
               </h2>
               <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                Don't just take our word for it. Here's what our clients have to
-                say about working with EMINENCE.
+                {copy(
+                  "032",
+                  "Don't just take our word for it. Here's what our clients have to say about working with EMINENCE.",
+                )}
               </p>
             </div>
           </Reveal>
@@ -371,7 +393,9 @@ export default function Home() {
                     ))}
                   </div>
                   <p className="text-slate-700 dark:text-slate-300 mb-8 italic relative z-10 font-serif leading-relaxed text-lg">
-                    "{testimonial.quote}"
+                    {copy("033", '"')}
+                    {testimonial.quote}
+                    {copy("034", '"')}
                   </p>
                   <div className="flex items-center gap-4 mt-auto">
                     <div className="w-12 h-12 bg-slate-200 dark:bg-slate-800 rounded-full flex items-center justify-center font-bold text-slate-500 dark:text-slate-400">
@@ -382,7 +406,9 @@ export default function Home() {
                         {testimonial.clientName}
                       </div>
                       <div className="text-sm text-slate-500 dark:text-slate-400">
-                        {testimonial.role}, {testimonial.company}
+                        {testimonial.role}
+                        {copy("035", ", ")}
+                        {testimonial.company}
                       </div>
                     </div>
                   </div>
@@ -400,15 +426,17 @@ export default function Home() {
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
               <div className="max-w-2xl">
                 <h2 className="text-3xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white">
-                  Engineering Insights
+                  {copy("036", "Engineering Insights")}
                 </h2>
                 <p className="text-lg text-slate-600 dark:text-slate-400">
-                  Latest thoughts, case studies, and technical deep-dives from
-                  our team.
+                  {copy(
+                    "037",
+                    "Latest thoughts, case studies, and technical deep-dives from our team.",
+                  )}
                 </p>
               </div>
               <Button asChild variant="outline" className="rounded-full">
-                <Link href="/blog">Read Our Blog</Link>
+                <Link href="/blog">{copy("038", "Read Our Blog")}</Link>
               </Button>
             </div>
           </Reveal>
@@ -438,7 +466,7 @@ export default function Home() {
                       <span className="text-slate-400 text-sm">
                         {new Date(post.publishedAt).toLocaleDateString(
                           undefined,
-                          { month: "short", day: "numeric" }
+                          { month: "short", day: "numeric" },
                         )}
                       </span>
                     </div>
@@ -449,7 +477,7 @@ export default function Home() {
                       {post.excerpt}
                     </p>
                     <div className="mt-auto flex items-center text-sm font-medium text-slate-900 dark:text-white pt-6 border-t border-slate-200 dark:border-slate-800">
-                      Read article{" "}
+                      {copy("039", "Read article")}{" "}
                       <ArrowRight className="w-4 h-4 ml-2 text-accent group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
@@ -468,11 +496,13 @@ export default function Home() {
         <div className="container mx-auto px-4 relative z-10 text-center max-w-4xl">
           <Reveal>
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-              Ready to scale your infrastructure?
+              {copy("040", "Ready to scale your infrastructure?")}
             </h2>
             <p className="text-xl text-primary-foreground/80 mb-10 max-w-2xl mx-auto font-light">
-              Partner with EMINENCE to build, scale, and optimize your technical
-              operations.
+              {copy(
+                "041",
+                "Partner with EMINENCE to build, scale, and optimize your technical operations.",
+              )}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
@@ -480,7 +510,7 @@ export default function Home() {
                 size="lg"
                 className="h-14 px-8 rounded-full text-base bg-white text-primary hover:bg-slate-100 w-full sm:w-auto"
               >
-                <Link href="/contact">Talk to an Expert</Link>
+                <Link href="/contact">{copy("042", "Talk to an Expert")}</Link>
               </Button>
               <Button
                 asChild
@@ -488,7 +518,9 @@ export default function Home() {
                 variant="outline"
                 className="h-14 px-8 rounded-full text-base border-white/30 text-white hover:bg-white/10 w-full sm:w-auto bg-transparent"
               >
-                <Link href="/services/consultancy">Book Consultation</Link>
+                <Link href="/services/consultancy">
+                  {copy("043", "Book Consultation")}
+                </Link>
               </Button>
             </div>
           </Reveal>

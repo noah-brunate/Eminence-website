@@ -5,6 +5,7 @@ import router from "./routes";
 import { logger } from "./lib/logger";
 
 const app: Express = express();
+app.set("trust proxy", 1);
 
 app.use(
   pinoHttp({
@@ -25,7 +26,15 @@ app.use(
     },
   }),
 );
-app.use(cors());
+// Admin authentication is same-origin only; do not grant CORS access.
+const publicCors = cors();
+app.use((req, res, next) => {
+  if (/^\/api\/admin(?:\/|$)/i.test(req.path)) {
+    next();
+    return;
+  }
+  publicCors(req, res, next);
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

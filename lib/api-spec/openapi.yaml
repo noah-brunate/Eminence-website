@@ -22,7 +22,268 @@ tags:
     description: Company stats
   - name: chat
     description: Live chat support
+  - name: bookings
+    description: Consultation booking requests
+  - name: admin
+    description: Protected administration operations
 paths:
+  /site/pages:
+    get:
+      operationId: getSitePages
+      tags:
+        - content
+      summary: getSitePages
+      description: Published copy for the fixed website pages.
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SitePages"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Conflicting version or duplicate request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /admin/content/schema:
+    get:
+      operationId: getContentSchema
+      tags:
+        - admin
+      summary: getContentSchema
+      description: ""
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentSchema"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Conflicting version or duplicate request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - adminSession: []
+  /admin/content/{kind}:
+    get:
+      operationId: listContentRecords
+      tags:
+        - admin
+      summary: listContentRecords
+      description: ""
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContentRecord"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Conflicting version or duplicate request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - adminSession: []
+      parameters:
+        - name: kind
+          in: path
+          required: true
+          schema: &id001
+            type: string
+  /admin/content/{kind}/{id}:
+    put:
+      operationId: saveContentRecord
+      tags:
+        - admin
+      summary: saveContentRecord
+      description:
+        Save draft, publish or unpublish. Version zero creates a collection
+        item. Existing records require their current version.
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentRecord"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Conflicting version or duplicate request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security: &id002
+        - adminSession: []
+          adminCsrf: []
+      parameters:
+        - name: kind
+          in: path
+          required: true
+          schema: *id001
+        - name: id
+          in: path
+          required: true
+          schema: *id001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContentCommand"
+    delete:
+      operationId: deleteContentRecord
+      tags:
+        - admin
+      summary: deleteContentRecord
+      description: ""
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                required:
+                  - success
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Conflicting version or duplicate request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security: *id002
+      parameters:
+        - name: kind
+          in: path
+          required: true
+          schema: *id001
+        - name: id
+          in: path
+          required: true
+          schema: *id001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContentDeleteInput"
+
+  /admin/bookings/{id}/replies:
+    get:
+      operationId: listBookingReplies
+      tags:
+        - admin
+      summary: listBookingReplies
+      description: ""
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookingReply"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Conflicting version or duplicate request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security:
+        - adminSession: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *id001
+    post:
+      operationId: sendBookingReply
+      tags:
+        - admin
+      summary: sendBookingReply
+      description:
+        Sends a customer email. Reuse the request UUID for retries; repeated
+        IDs never send twice. sent means mail server accepted, not confirmed inbox delivery.
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookingReply"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Conflicting version or duplicate request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security: *id002
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: *id001
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingReplyInput"
   /healthz:
     get:
       operationId: healthCheck
@@ -56,6 +317,167 @@ paths:
                 $ref: "#/components/schemas/SuccessResponse"
         "400":
           description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /bookings:
+    post:
+      operationId: submitBooking
+      tags: [bookings]
+      summary: Submit a consultation booking request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingInput"
+      responses:
+        "200":
+          description: Booking request received
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "429":
+          description: Rate limited
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/login:
+    post:
+      operationId: adminLogin
+      tags: [admin]
+      summary: Sign in to the administrator console
+      description: Same-origin JSON requests only. Send X-Admin-Request with value 1.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginInput"
+      responses:
+        "200":
+          description: Signed in; sets an HttpOnly session cookie
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Incorrect email or password
+        "403":
+          description: Invalid login request
+        "429":
+          description: Too many login attempts
+        "503":
+          description: Administrator credentials are not configured
+
+  /admin/session:
+    get:
+      operationId: getAdminSession
+      tags: [admin]
+      summary: Restore an administrator session
+      security:
+        - adminSession: []
+      responses:
+        "200":
+          description: Current session
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminSession"
+        "401":
+          description: Session absent or expired
+
+  /admin/logout:
+    post:
+      operationId: adminLogout
+      tags: [admin]
+      summary: Revoke the current administrator session
+      security:
+        - adminSession: []
+          adminCsrf: []
+      responses:
+        "200":
+          description: Session revoked and cookie cleared
+        "401":
+          description: Session absent or expired
+        "403":
+          description: Invalid CSRF token
+
+  /admin/bookings:
+    get:
+      operationId: listBookings
+      tags: [admin]
+      summary: List consultation booking requests
+      security:
+        - adminSession: []
+      responses:
+        "200":
+          description: Booking requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /admin/bookings/{id}:
+    patch:
+      operationId: updateBooking
+      tags: [admin]
+      summary: Update booking status and internal notes
+      security:
+        - adminSession: []
+          adminCsrf: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingUpdateInput"
+      responses:
+        "200":
+          description: Updated booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Booking not found
           content:
             application/json:
               schema:
@@ -204,7 +626,186 @@ paths:
                 $ref: "#/components/schemas/SuccessResponse"
 
 components:
+  securitySchemes:
+    adminSession:
+      type: apiKey
+      in: cookie
+      name: eminence_admin_session
+    adminCsrf:
+      type: apiKey
+      in: header
+      name: X-CSRF-Token
   schemas:
+    ContentDeleteInput:
+      type: object
+      required: [version]
+      properties:
+        version:
+          type: number
+    ContentField:
+      type: object
+      properties:
+        key: &id001
+          type: string
+        label: *id001
+        type:
+          type: string
+          enum:
+            - text
+            - long
+            - number
+            - list
+            - choice
+            - link
+            - image
+        required:
+          type: boolean
+        choices:
+          type: array
+          items: *id001
+      required:
+        - key
+        - label
+        - type
+    ContentRecord:
+      type: object
+      properties:
+        kind: *id001
+        id: *id001
+        data: &id003
+          type: object
+          additionalProperties: true
+        publishedData:
+          type:
+            - object
+            - "null"
+          additionalProperties: true
+        published:
+          type: boolean
+        position: &id002
+          type: number
+        version: *id002
+        updatedAt: *id001
+      required:
+        - kind
+        - id
+        - data
+        - publishedData
+        - published
+        - position
+        - version
+        - updatedAt
+    ContentSchema:
+      type: object
+      properties:
+        collections:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/ContentField"
+        pages:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: "#/components/schemas/ContentField"
+      required:
+        - collections
+        - pages
+    ContentCommand:
+      type: object
+      properties:
+        data: *id003
+        version: *id002
+        position: *id002
+        action:
+          type: string
+          enum:
+            - save
+            - publish
+            - unpublish
+      required:
+        - data
+        - version
+        - position
+        - action
+    SitePages:
+      type: object
+      additionalProperties:
+        type: object
+        additionalProperties: *id001
+    BookingReplyInput:
+      type: object
+      properties:
+        id: *id001
+        subject: *id001
+        message: *id001
+        kind:
+          type: string
+          enum:
+            - message
+            - confirm
+            - propose
+        appointmentAt: *id001
+      required:
+        - id
+        - subject
+        - message
+        - kind
+    BookingReply:
+      type: object
+      properties:
+        id: *id001
+        bookingId: *id001
+        recipient: *id001
+        subject: *id001
+        message: *id001
+        kind: *id001
+        status: *id001
+        appointmentAt:
+          type:
+            - string
+            - "null"
+        error:
+          type:
+            - string
+            - "null"
+        createdAt: *id001
+        sentAt:
+          type:
+            - string
+            - "null"
+      required:
+        - id
+        - bookingId
+        - recipient
+        - subject
+        - message
+        - kind
+        - status
+        - appointmentAt
+        - error
+        - createdAt
+        - sentAt
+    AdminLoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          maxLength: 254
+        password:
+          type: string
+          maxLength: 1024
+    AdminSession:
+      type: object
+      required: [email, csrfToken]
+      properties:
+        email:
+          type: string
+        csrfToken:
+          type: string
     HealthStatus:
       type: object
       required: [status]
@@ -245,6 +846,100 @@ components:
         message:
           type: string
           minLength: 10
+        website:
+          type: ["string", "null"]
+          description: Honeypot field; must remain empty
+
+    BookingInput:
+      type: object
+      required: [name, email, company, topic, preferredAt, timezone]
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 120
+        email:
+          type: string
+        company:
+          type: string
+          minLength: 2
+          maxLength: 160
+        phone:
+          type: ["string", "null"]
+          maxLength: 40
+        topic:
+          type: string
+          minLength: 2
+          maxLength: 160
+        message:
+          type: ["string", "null"]
+          maxLength: 3000
+        preferredAt:
+          type: string
+          format: date-time
+        timezone:
+          type: string
+          minLength: 1
+          maxLength: 100
+        website:
+          type: ["string", "null"]
+          description: Honeypot field; must remain empty
+
+    BookingUpdateInput:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/BookingStatus"
+        internalNotes:
+          type: ["string", "null"]
+          maxLength: 5000
+
+    BookingStatus:
+      type: string
+      enum: [new, contacted, scheduled, completed, cancelled, spam]
+
+    Booking:
+      type: object
+      required:
+        [
+          id,
+          name,
+          email,
+          company,
+          topic,
+          preferredAt,
+          timezone,
+          status,
+          createdAt,
+          updatedAt,
+        ]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        company:
+          type: string
+        phone:
+          type: ["string", "null"]
+        topic:
+          type: string
+        message:
+          type: ["string", "null"]
+        preferredAt:
+          type: string
+        timezone:
+          type: string
+        status:
+          $ref: "#/components/schemas/BookingStatus"
+        internalNotes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
 
     NewsletterInput:
       type: object
@@ -351,6 +1046,9 @@ components:
       type: object
       required: [id, slug, title, excerpt, author, publishedAt, category]
       properties:
+        body:
+          type: string
+          description: Article body with limited paragraph, heading, quote and list formatting.
         id:
           type: string
         slug:
@@ -370,7 +1068,14 @@ components:
 
     CompanyStats:
       type: object
-      required: [clientsServed, projectsDelivered, teamSize, yearsActive, countriesReached]
+      required:
+        [
+          clientsServed,
+          projectsDelivered,
+          teamSize,
+          yearsActive,
+          countriesReached,
+        ]
       properties:
         clientsServed:
           type: number

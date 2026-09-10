@@ -19,4 +19,9 @@ export interface ContactInput {
   service?: string | null;
   /** @minLength 10 */
   message: string;
+  /**
+     * Honeypot field; must remain empty
+     * @nullable
+     */
+  website?: string | null;
 }

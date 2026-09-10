@@ -9,6 +9,153 @@ import * as zod from 'zod';
 
 
 /**
+ * Published copy for the fixed website pages.
+ * @summary getSitePages
+ */
+export const GetSitePagesResponse = zod.record(zod.string(), zod.record(zod.string(), zod.string()))
+
+
+/**
+ * @summary getContentSchema
+ */
+export const GetContentSchemaResponse = zod.object({
+  "collections": zod.record(zod.string(), zod.array(zod.object({
+  "key": zod.string(),
+  "label": zod.string(),
+  "type": zod.enum(['text', 'long', 'number', 'list', 'choice', 'link', 'image']),
+  "required": zod.boolean().optional(),
+  "choices": zod.array(zod.string()).optional()
+}))),
+  "pages": zod.record(zod.string(), zod.array(zod.object({
+  "key": zod.string(),
+  "label": zod.string(),
+  "type": zod.enum(['text', 'long', 'number', 'list', 'choice', 'link', 'image']),
+  "required": zod.boolean().optional(),
+  "choices": zod.array(zod.string()).optional()
+})))
+})
+
+
+/**
+ * @summary listContentRecords
+ */
+export const ListContentRecordsParams = zod.object({
+  "kind": zod.coerce.string()
+})
+
+export const ListContentRecordsResponseItem = zod.object({
+  "kind": zod.string(),
+  "id": zod.string(),
+  "data": zod.record(zod.string(), zod.unknown()),
+  "publishedData": zod.record(zod.string(), zod.unknown()).nullable(),
+  "published": zod.boolean(),
+  "position": zod.number(),
+  "version": zod.number(),
+  "updatedAt": zod.string()
+})
+export const ListContentRecordsResponse = zod.array(ListContentRecordsResponseItem)
+
+
+/**
+ * Save draft, publish or unpublish. Version zero creates a collection item. Existing records require their current version.
+ * @summary saveContentRecord
+ */
+export const SaveContentRecordParams = zod.object({
+  "kind": zod.coerce.string(),
+  "id": zod.coerce.string()
+})
+
+export const SaveContentRecordBody = zod.object({
+  "data": zod.record(zod.string(), zod.unknown()),
+  "version": zod.number(),
+  "position": zod.number(),
+  "action": zod.enum(['save', 'publish', 'unpublish'])
+})
+
+export const SaveContentRecordResponse = zod.object({
+  "kind": zod.string(),
+  "id": zod.string(),
+  "data": zod.record(zod.string(), zod.unknown()),
+  "publishedData": zod.record(zod.string(), zod.unknown()).nullable(),
+  "published": zod.boolean(),
+  "position": zod.number(),
+  "version": zod.number(),
+  "updatedAt": zod.string()
+})
+
+
+/**
+ * @summary deleteContentRecord
+ */
+export const DeleteContentRecordParams = zod.object({
+  "kind": zod.coerce.string(),
+  "id": zod.coerce.string()
+})
+
+export const DeleteContentRecordBody = zod.object({
+  "version": zod.number()
+})
+
+export const DeleteContentRecordResponse = zod.object({
+  "success": zod.boolean()
+})
+
+
+/**
+ * @summary listBookingReplies
+ */
+export const ListBookingRepliesParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+export const ListBookingRepliesResponseItem = zod.object({
+  "id": zod.string(),
+  "bookingId": zod.string(),
+  "recipient": zod.string(),
+  "subject": zod.string(),
+  "message": zod.string(),
+  "kind": zod.string(),
+  "status": zod.string(),
+  "appointmentAt": zod.string().nullable(),
+  "error": zod.string().nullable(),
+  "createdAt": zod.string(),
+  "sentAt": zod.string().nullable()
+})
+export const ListBookingRepliesResponse = zod.array(ListBookingRepliesResponseItem)
+
+
+/**
+ * Sends a customer email. Reuse the request UUID for retries; repeated IDs never send twice. sent means mail server accepted, not confirmed inbox delivery.
+ * @summary sendBookingReply
+ */
+export const SendBookingReplyParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+export const SendBookingReplyBody = zod.object({
+  "id": zod.string(),
+  "subject": zod.string(),
+  "message": zod.string(),
+  "kind": zod.enum(['message', 'confirm', 'propose']),
+  "appointmentAt": zod.string().optional()
+})
+
+export const SendBookingReplyResponse = zod.object({
+  "id": zod.string(),
+  "bookingId": zod.string(),
+  "recipient": zod.string(),
+  "subject": zod.string(),
+  "message": zod.string(),
+  "kind": zod.string(),
+  "status": zod.string(),
+  "appointmentAt": zod.string().nullable(),
+  "error": zod.string().nullable(),
+  "createdAt": zod.string(),
+  "sentAt": zod.string().nullable()
+})
+
+
+/**
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
@@ -30,12 +177,141 @@ export const SubmitContactBody = zod.object({
   "email": zod.string(),
   "company": zod.string().nullish(),
   "service": zod.string().nullish().describe('Which service they are enquiring about'),
-  "message": zod.string().min(submitContactBodyMessageMin)
+  "message": zod.string().min(submitContactBodyMessageMin),
+  "website": zod.string().nullish().describe('Honeypot field; must remain empty')
 })
 
 export const SubmitContactResponse = zod.object({
   "success": zod.boolean(),
   "message": zod.string()
+})
+
+
+/**
+ * @summary Submit a consultation booking request
+ */
+export const submitBookingBodyNameMin = 2;
+export const submitBookingBodyNameMax = 120;
+
+export const submitBookingBodyCompanyMin = 2;
+export const submitBookingBodyCompanyMax = 160;
+
+export const submitBookingBodyPhoneMax = 40;
+
+export const submitBookingBodyTopicMin = 2;
+export const submitBookingBodyTopicMax = 160;
+
+export const submitBookingBodyMessageMax = 3000;
+
+export const submitBookingBodyTimezoneMax = 100;
+
+
+
+export const SubmitBookingBody = zod.object({
+  "name": zod.string().min(submitBookingBodyNameMin).max(submitBookingBodyNameMax),
+  "email": zod.string(),
+  "company": zod.string().min(submitBookingBodyCompanyMin).max(submitBookingBodyCompanyMax),
+  "phone": zod.string().max(submitBookingBodyPhoneMax).nullish(),
+  "topic": zod.string().min(submitBookingBodyTopicMin).max(submitBookingBodyTopicMax),
+  "message": zod.string().max(submitBookingBodyMessageMax).nullish(),
+  "preferredAt": zod.coerce.date(),
+  "timezone": zod.string().min(1).max(submitBookingBodyTimezoneMax),
+  "website": zod.string().nullish().describe('Honeypot field; must remain empty')
+})
+
+export const SubmitBookingResponse = zod.object({
+  "success": zod.boolean(),
+  "message": zod.string()
+})
+
+
+/**
+ * Same-origin JSON requests only. Send X-Admin-Request with value 1.
+ * @summary Sign in to the administrator console
+ */
+export const adminLoginBodyEmailMax = 254;
+
+export const adminLoginBodyPasswordMax = 1024;
+
+
+
+export const AdminLoginBody = zod.object({
+  "email": zod.string().max(adminLoginBodyEmailMax),
+  "password": zod.string().max(adminLoginBodyPasswordMax)
+})
+
+export const AdminLoginResponse = zod.object({
+  "email": zod.string(),
+  "csrfToken": zod.string()
+})
+
+
+/**
+ * @summary Restore an administrator session
+ */
+export const GetAdminSessionResponse = zod.object({
+  "email": zod.string(),
+  "csrfToken": zod.string()
+})
+
+
+/**
+ * @summary Revoke the current administrator session
+ */
+export const AdminLogoutResponse = zod.unknown()
+
+
+/**
+ * @summary List consultation booking requests
+ */
+export const ListBookingsResponseItem = zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "company": zod.string(),
+  "phone": zod.string().nullish(),
+  "topic": zod.string(),
+  "message": zod.string().nullish(),
+  "preferredAt": zod.string(),
+  "timezone": zod.string(),
+  "status": zod.enum(['new', 'contacted', 'scheduled', 'completed', 'cancelled', 'spam']),
+  "internalNotes": zod.string().nullish(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string()
+})
+export const ListBookingsResponse = zod.array(ListBookingsResponseItem)
+
+
+/**
+ * @summary Update booking status and internal notes
+ */
+export const UpdateBookingParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+export const updateBookingBodyInternalNotesMax = 5000;
+
+
+
+export const UpdateBookingBody = zod.object({
+  "status": zod.enum(['new', 'contacted', 'scheduled', 'completed', 'cancelled', 'spam']).optional(),
+  "internalNotes": zod.string().max(updateBookingBodyInternalNotesMax).nullish()
+})
+
+export const UpdateBookingResponse = zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "company": zod.string(),
+  "phone": zod.string().nullish(),
+  "topic": zod.string(),
+  "message": zod.string().nullish(),
+  "preferredAt": zod.string(),
+  "timezone": zod.string(),
+  "status": zod.enum(['new', 'contacted', 'scheduled', 'completed', 'cancelled', 'spam']),
+  "internalNotes": zod.string().nullish(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string()
 })
 
 
@@ -124,6 +400,7 @@ export const ListTestimonialsResponse = zod.array(ListTestimonialsResponseItem)
  * @summary List blog posts
  */
 export const ListBlogPostsResponseItem = zod.object({
+  "body": zod.string().optional().describe('Article body with limited paragraph, heading, quote and list formatting.'),
   "id": zod.string(),
   "slug": zod.string(),
   "title": zod.string(),

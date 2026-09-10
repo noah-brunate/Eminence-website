@@ -1,15 +1,18 @@
-import React from 'react';
-import { useLocation } from 'wouter';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Home, FileQuestion } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { useSiteCopy } from "@/lib/site-content";
+import React from "react";
+import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Home, FileQuestion } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function NotFound() {
+  const copy = useSiteCopy("not-found");
+
   const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full text-center space-y-8"
@@ -20,36 +23,39 @@ export default function NotFound() {
             <FileQuestion className="w-10 h-10 text-primary dark:text-accent" />
           </div>
         </div>
-        
+
         <div className="space-y-3">
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight">
-            404
+            {copy("001", "404")}
           </h1>
           <p className="text-xl text-slate-600 dark:text-slate-400">
-            Page not found
+            {copy("002", "Page not found")}
           </p>
           <p className="text-slate-500 dark:text-slate-500">
-            The page you're looking for doesn't exist or has been moved.
+            {copy(
+              "003",
+              "The page you're looking for doesn't exist or has been moved.",
+            )}
           </p>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-          <Button 
-            variant="outline" 
-            size="lg" 
+          <Button
+            variant="outline"
+            size="lg"
             className="w-full sm:w-auto rounded-full"
             onClick={() => window.history.back()}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Go Back
+            {copy("004", "Go Back")}
           </Button>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="w-full sm:w-auto rounded-full bg-primary"
-            onClick={() => setLocation('/')}
+            onClick={() => setLocation("/")}
           >
             <Home className="w-4 h-4 mr-2" />
-            Return Home
+            {copy("005", "Return Home")}
           </Button>
         </div>
       </motion.div>

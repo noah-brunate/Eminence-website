@@ -5,6 +5,115 @@
  * EMINENCE company website API
  * OpenAPI spec version: 0.1.0
  */
+export interface ContentDeleteInput {
+    version: number;
+}
+export type ContentFieldType = typeof ContentFieldType[keyof typeof ContentFieldType];
+export declare const ContentFieldType: {
+    readonly text: "text";
+    readonly long: "long";
+    readonly number: "number";
+    readonly list: "list";
+    readonly choice: "choice";
+    readonly link: "link";
+    readonly image: "image";
+};
+export interface ContentField {
+    key: string;
+    label: string;
+    type: ContentFieldType;
+    required?: boolean;
+    choices?: string[];
+}
+export type ContentRecordData = {
+    [key: string]: unknown;
+};
+/**
+ * @nullable
+ */
+export type ContentRecordPublishedData = {
+    [key: string]: unknown;
+} | null;
+export interface ContentRecord {
+    kind: string;
+    id: string;
+    data: ContentRecordData;
+    /** @nullable */
+    publishedData: ContentRecordPublishedData;
+    published: boolean;
+    position: number;
+    version: number;
+    updatedAt: string;
+}
+export type ContentSchemaCollections = {
+    [key: string]: ContentField[];
+};
+export type ContentSchemaPages = {
+    [key: string]: ContentField[];
+};
+export interface ContentSchema {
+    collections: ContentSchemaCollections;
+    pages: ContentSchemaPages;
+}
+export type ContentCommandData = {
+    [key: string]: unknown;
+};
+export type ContentCommandAction = typeof ContentCommandAction[keyof typeof ContentCommandAction];
+export declare const ContentCommandAction: {
+    readonly save: "save";
+    readonly publish: "publish";
+    readonly unpublish: "unpublish";
+};
+export interface ContentCommand {
+    data: ContentCommandData;
+    version: number;
+    position: number;
+    action: ContentCommandAction;
+}
+export interface SitePages {
+    [key: string]: {
+        [key: string]: string;
+    };
+}
+export type BookingReplyInputKind = typeof BookingReplyInputKind[keyof typeof BookingReplyInputKind];
+export declare const BookingReplyInputKind: {
+    readonly message: "message";
+    readonly confirm: "confirm";
+    readonly propose: "propose";
+};
+export interface BookingReplyInput {
+    id: string;
+    subject: string;
+    message: string;
+    kind: BookingReplyInputKind;
+    appointmentAt?: string;
+}
+export interface BookingReply {
+    id: string;
+    bookingId: string;
+    recipient: string;
+    subject: string;
+    message: string;
+    kind: string;
+    status: string;
+    /** @nullable */
+    appointmentAt: string | null;
+    /** @nullable */
+    error: string | null;
+    createdAt: string;
+    /** @nullable */
+    sentAt: string | null;
+}
+export interface AdminLoginInput {
+    /** @maxLength 254 */
+    email: string;
+    /** @maxLength 1024 */
+    password: string;
+}
+export interface AdminSession {
+    email: string;
+    csrfToken: string;
+}
 export interface HealthStatus {
     status: string;
 }
@@ -28,6 +137,85 @@ export interface ContactInput {
     service?: string | null;
     /** @minLength 10 */
     message: string;
+    /**
+       * Honeypot field; must remain empty
+       * @nullable
+       */
+    website?: string | null;
+}
+export interface BookingInput {
+    /**
+       * @minLength 2
+       * @maxLength 120
+       */
+    name: string;
+    email: string;
+    /**
+       * @minLength 2
+       * @maxLength 160
+       */
+    company: string;
+    /**
+       * @maxLength 40
+       * @nullable
+       */
+    phone?: string | null;
+    /**
+       * @minLength 2
+       * @maxLength 160
+       */
+    topic: string;
+    /**
+       * @maxLength 3000
+       * @nullable
+       */
+    message?: string | null;
+    preferredAt: string;
+    /**
+       * @minLength 1
+       * @maxLength 100
+       */
+    timezone: string;
+    /**
+       * Honeypot field; must remain empty
+       * @nullable
+       */
+    website?: string | null;
+}
+export type BookingStatus = typeof BookingStatus[keyof typeof BookingStatus];
+export declare const BookingStatus: {
+    readonly new: "new";
+    readonly contacted: "contacted";
+    readonly scheduled: "scheduled";
+    readonly completed: "completed";
+    readonly cancelled: "cancelled";
+    readonly spam: "spam";
+};
+export interface BookingUpdateInput {
+    status?: BookingStatus;
+    /**
+       * @maxLength 5000
+       * @nullable
+       */
+    internalNotes?: string | null;
+}
+export interface Booking {
+    id: string;
+    name: string;
+    email: string;
+    company: string;
+    /** @nullable */
+    phone?: string | null;
+    topic: string;
+    /** @nullable */
+    message?: string | null;
+    preferredAt: string;
+    timezone: string;
+    status: BookingStatus;
+    /** @nullable */
+    internalNotes?: string | null;
+    createdAt: string;
+    updatedAt: string;
 }
 export interface NewsletterInput {
     email: string;
@@ -82,6 +270,8 @@ export interface Testimonial {
     service?: string;
 }
 export interface BlogPost {
+    /** Article body with limited paragraph, heading, quote and list formatting. */
+    body?: string;
     id: string;
     slug: string;
     title: string;
@@ -99,4 +289,7 @@ export interface CompanyStats {
     countriesReached: number;
     satisfactionRate?: number;
 }
+export type DeleteContentRecord200 = {
+    success: boolean;
+};
 //# sourceMappingURL=api.schemas.d.ts.map

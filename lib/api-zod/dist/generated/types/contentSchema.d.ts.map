@@ -1,0 +1,1 @@
+{"version":3,"file":"contentSchema.d.ts","sourceRoot":"","sources":["../../../src/generated/types/contentSchema.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AACH,OAAO,KAAK,EAAE,wBAAwB,EAAE,MAAM,4BAA4B,CAAC;AAC3E,OAAO,KAAK,EAAE,kBAAkB,EAAE,MAAM,sBAAsB,CAAC;AAE/D,MAAM,WAAW,aAAa;IAC5B,WAAW,EAAE,wBAAwB,CAAC;IACtC,KAAK,EAAE,kBAAkB,CAAC;CAC3B"}
