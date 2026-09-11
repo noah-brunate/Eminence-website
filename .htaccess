@@ -1,0 +1,36 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # ==========================================
+  # STEP 1: ROUTE FASTAPI SUBDOMAIN (HIGHEST PRIORITY)
+  # ==========================================
+  # If a request specifically hits the 'qservices' subdomain...
+  RewriteCond %{HTTP_HOST} ^qservices\.yourdomain\.ug$ [NC]
+  # ...and it hasn't already been rewritten to the subfolder...
+  RewriteCond %{REQUEST_URI} !^/qservices/ [NC]
+  # ...stealthily pull it from the 'qservices' Python application directory
+  RewriteRule ^(.*)$ qservices/$1 [L]
+
+
+  # ==========================================
+  # STEP 2: BYPASS RULES FOR INTERNAL BACKENDS
+  # ==========================================
+  # EXCEPTION A: If a request is trying to hit your Node API (/api/*)
+  RewriteCond %{REQUEST_URI} ^/api/ [NC]
+  RewriteRule .* - [L]
+
+  # EXCEPTION B: If a request is directly aiming for the Python folder (/qservices/*)
+  RewriteCond %{REQUEST_URI} ^/qservices/ [NC]
+  RewriteRule .* - [L]
+
+
+  # ==========================================
+  # STEP 3: SERVE THE REACT CLIENT (SPA FALLBACK)
+  # ==========================================
+  # If the requested file or folder does NOT physically exist on the server disk...
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  # ...hand the routing over to your React frontend index.html file
+  RewriteRule . /index.html [L]
+</IfModule>
