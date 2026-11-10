@@ -14,6 +14,8 @@ var __export = (target, all) => {
 
 // src/app.ts
 import express from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import cors from "cors";
 import pinoHttp from "pino-http";
 
@@ -3313,13 +3315,13 @@ var chat_default = router5;
 // src/routes/content.ts
 import { Router as Router8 } from "express";
 var router6 = Router8();
-for (const [path, kind] of Object.entries({
+for (const [path2, kind] of Object.entries({
   "/products": "products",
   "/testimonials": "testimonials",
   "/blog/posts": "posts",
   "/stats": "stats"
 })) {
-  router6.get(path, async (_req, res) => {
+  router6.get(path2, async (_req, res) => {
     res.setHeader("Cache-Control", "no-cache");
     const records = await publicRecords(kind);
     res.json(kind === "stats" ? records[0] ?? {} : records);
@@ -3628,12 +3630,23 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", routes_default);
+var publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "public");
+app.use(express.static(publicDir, { index: "index.html" }));
+app.use((req, res, next) => {
+  if (req.method !== "GET" || req.path === "/api" || req.path.startsWith("/api/") || path.extname(req.path)) {
+    next();
+    return;
+  }
+  res.sendFile(path.join(publicDir, "index.html"), (err) => {
+    if (err) next(err);
+  });
+});
 var app_default = app;
 
 // src/lib/initialize-content.ts
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { sql as sql2, eq as eq4 } from "drizzle-orm";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath as fileURLToPath2 } from "node:url";
 
 // src/data/catalog-defaults.ts
 var PRODUCTS = [
@@ -4006,7 +4019,7 @@ async function seedContent() {
 }
 async function initializeContent() {
   await migrate(db, {
-    migrationsFolder: fileURLToPath(new URL("./migrations", import.meta.url))
+    migrationsFolder: fileURLToPath2(new URL("./migrations", import.meta.url))
   });
   await seedContent();
 }

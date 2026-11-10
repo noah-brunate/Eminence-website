@@ -1,4 +1,6 @@
 import express, { type Express } from "express";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
@@ -39,5 +41,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
+
+// cPanel can run the website and API as one Node application on the same
+// domain. The deployment build places Vite's output beside the API bundle.
+const publicDir = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "public",
+);
+app.use(express.static(publicDir, { index: "index.html" }));
+app.use((req, res, next) => {
+  if (
+    req.method !== "GET" ||
+    req.path === "/api" ||
+    req.path.startsWith("/api/") ||
+    path.extname(req.path)
+  ) {
+    next();
+    return;
+  }
+  res.sendFile(path.join(publicDir, "index.html"), (err) => {
+    if (err) next(err);
+  });
+});
 
 export default app;
