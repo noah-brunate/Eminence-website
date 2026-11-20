@@ -340,10 +340,11 @@ __export(schema_exports, {
 });
 
 // ../../lib/db/src/schema/contact-submissions.ts
+import { randomUUID } from "node:crypto";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 var contactSubmissionsTable = pgTable("contact_submissions", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: uuid("id").primaryKey().$defaultFn(() => randomUUID()),
   name: text("name").notNull(),
   email: text("email").notNull(),
   company: text("company"),
@@ -357,10 +358,11 @@ var insertContactSchema = createInsertSchema(contactSubmissionsTable).omit({
 });
 
 // ../../lib/db/src/schema/newsletter-subscribers.ts
+import { randomUUID as randomUUID2 } from "node:crypto";
 import { pgTable as pgTable2, text as text2, timestamp as timestamp2, uuid as uuid2 } from "drizzle-orm/pg-core";
 import { createInsertSchema as createInsertSchema2 } from "drizzle-zod";
 var newsletterSubscribersTable = pgTable2("newsletter_subscribers", {
-  id: uuid2("id").primaryKey().defaultRandom(),
+  id: uuid2("id").primaryKey().$defaultFn(() => randomUUID2()),
   email: text2("email").notNull().unique(),
   subscribedAt: timestamp2("subscribed_at", { withTimezone: true }).notNull().defaultNow()
 });
@@ -370,10 +372,11 @@ var insertNewsletterSchema = createInsertSchema2(newsletterSubscribersTable).omi
 });
 
 // ../../lib/db/src/schema/job-applications.ts
+import { randomUUID as randomUUID3 } from "node:crypto";
 import { pgTable as pgTable3, text as text3, timestamp as timestamp3, uuid as uuid3 } from "drizzle-orm/pg-core";
 import { createInsertSchema as createInsertSchema3 } from "drizzle-zod";
 var jobApplicationsTable = pgTable3("job_applications", {
-  id: uuid3("id").primaryKey().defaultRandom(),
+  id: uuid3("id").primaryKey().$defaultFn(() => randomUUID3()),
   fullName: text3("full_name").notNull(),
   email: text3("email").notNull(),
   roleAppliedFor: text3("role_applied_for").notNull(),
@@ -387,10 +390,11 @@ var insertJobApplicationSchema = createInsertSchema3(jobApplicationsTable).omit(
 });
 
 // ../../lib/db/src/schema/chat-messages.ts
+import { randomUUID as randomUUID4 } from "node:crypto";
 import { pgTable as pgTable4, text as text4, timestamp as timestamp4, uuid as uuid4 } from "drizzle-orm/pg-core";
 import { createInsertSchema as createInsertSchema4 } from "drizzle-zod";
 var chatMessagesTable = pgTable4("chat_messages", {
-  id: uuid4("id").primaryKey().defaultRandom(),
+  id: uuid4("id").primaryKey().$defaultFn(() => randomUUID4()),
   name: text4("name").notNull(),
   email: text4("email").notNull(),
   message: text4("message").notNull(),
@@ -402,10 +406,11 @@ var insertChatMessageSchema = createInsertSchema4(chatMessagesTable).omit({
 });
 
 // ../../lib/db/src/schema/consultation-bookings.ts
+import { randomUUID as randomUUID5 } from "node:crypto";
 import { pgTable as pgTable5, text as text5, timestamp as timestamp5, uuid as uuid5 } from "drizzle-orm/pg-core";
 import { createInsertSchema as createInsertSchema5 } from "drizzle-zod";
 var consultationBookingsTable = pgTable5("consultation_bookings", {
-  id: uuid5("id").primaryKey().defaultRandom(),
+  id: uuid5("id").primaryKey().$defaultFn(() => randomUUID5()),
   name: text5("name").notNull(),
   email: text5("email").notNull(),
   company: text5("company").notNull(),
@@ -3630,7 +3635,10 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api", routes_default);
-var publicDir = path.join(path.dirname(fileURLToPath(import.meta.url)), "public");
+var publicDir = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "public"
+);
 app.use(express.static(publicDir, { index: "index.html" }));
 app.use((req, res, next) => {
   if (req.method !== "GET" || req.path === "/api" || req.path.startsWith("/api/") || path.extname(req.path)) {

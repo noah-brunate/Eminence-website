@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "contact_submissions" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"email" text NOT NULL,
 	"company" text,
@@ -9,14 +9,14 @@ CREATE TABLE IF NOT EXISTS "contact_submissions" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "newsletter_subscribers" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"email" text NOT NULL,
 	"subscribed_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "newsletter_subscribers_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "job_applications" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"full_name" text NOT NULL,
 	"email" text NOT NULL,
 	"role_applied_for" text NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS "job_applications" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "chat_messages" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"email" text NOT NULL,
 	"message" text NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS "chat_messages" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "consultation_bookings" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" uuid PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"email" text NOT NULL,
 	"company" text NOT NULL,
