@@ -4,3 +4,4 @@ artifacts/api-server/.env
 artifacts/eminence-website/node_modules
 artifacts/eminence-website/.env
 artifacts/eminence-website/tsconfig.tsbuildinfo
+.env

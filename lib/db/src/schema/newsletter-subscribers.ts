@@ -1,9 +1,10 @@
+import { randomUUID } from "node:crypto";
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
 export const newsletterSubscribersTable = pgTable("newsletter_subscribers", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: uuid("id").primaryKey().$defaultFn(() => randomUUID()),
   email: text("email").notNull().unique(),
   subscribedAt: timestamp("subscribed_at", { withTimezone: true }).notNull().defaultNow(),
 });
